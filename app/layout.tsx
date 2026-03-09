@@ -17,13 +17,6 @@ export const metadata: Metadata = {
   title: "Eu, Consultor | Gestão para consultores de campo",
   description:
     "Organize atendimentos, clientes, agenda, relatórios e cobranças em um único sistema criado para consultores de campo.",
-  icons: {
-    icon: [
-      { url: "/icon.png", type: "image/png" },
-    ],
-    apple: "/icon.png",
-    shortcut: "/icon.png",
-  },
   openGraph: {
     title: "Eu, Consultor | Gestão para consultores de campo",
     description:
