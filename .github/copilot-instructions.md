@@ -1,0 +1,19 @@
+- [x] Verify that the copilot-instructions.md file in the .github directory is created.
+- [x] Clarify Project Requirements
+  - Next.js com App Router, TypeScript, ESLint e landing page SaaS moderna para Eu, Consultor.
+- [x] Scaffold the Project
+- [x] Customize the Project
+- [x] Install Required Extensions
+  - Nenhuma extensao adicional foi exigida pelo setup.
+- [x] Compile the Project
+  - Build e lint executados com sucesso.
+- [x] Create and Run Task
+  - Task "Dev Server" criada e iniciada com `npm run dev`.
+- [x] Launch the Project
+  - Aplicacao aberta localmente no navegador integrado em `http://localhost:3000`.
+- [x] Ensure Documentation is Complete
+  - README atualizado e checklist finalizado.
+
+- Work through each checklist item systematically.
+- Keep communication concise and focused.
+- Follow development best practices.
