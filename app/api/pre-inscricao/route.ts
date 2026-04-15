@@ -70,7 +70,8 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.error("Falha no webhook de pré-inscrição:", error);
-    return NextResponse.json({ error: "Falha ao enviar pré-inscrição." }, { status: 504 });
+    const status = error instanceof Error && error.name === "AbortError" ? 504 : 502;
+    return NextResponse.json({ error: "Falha ao enviar pré-inscrição." }, { status });
   }
 
   return NextResponse.json({ ok: true });
