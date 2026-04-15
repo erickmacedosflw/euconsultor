@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-const PRE_INSCRICAO_URL = "https://1f54c71f0e2ee9afa25db153e31b08.e2.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/f11f097ae642427cbd50f8f2c7365d66/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qotm0YLKhpZ9ETblL9uzQhC7BETywQ4HYnn-tSPq_E0";
-
 type PreInscricaoPayload = {
   empresa: string;
   nomecompleto: string;
@@ -21,6 +19,12 @@ function isValidPayload(body: unknown): body is PreInscricaoPayload {
 }
 
 export async function POST(request: Request) {
+  const preInscricaoUrl = process.env.POWER_AUTOMATE_WEBHOOK_URL;
+
+  if (!preInscricaoUrl) {
+    return NextResponse.json({ error: "Integração de pré-inscrição não configurada." }, { status: 500 });
+  }
+
   let body: unknown;
 
   try {
@@ -45,7 +49,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const response = await fetch(PRE_INSCRICAO_URL, {
+    const response = await fetch(preInscricaoUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
