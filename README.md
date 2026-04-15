@@ -36,7 +36,7 @@ npm run lint
 npm run build
 ```
 
-## Observacoes
+## Observações
 
 - O modal de pré-inscrição da landing envia os dados para um endpoint server-side em `app/api/pre-inscricao/route.ts`.
 - Configure `POWER_AUTOMATE_WEBHOOK_URL` no `.env.local` com a URL do fluxo do Power Automate.

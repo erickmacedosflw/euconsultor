@@ -340,8 +340,7 @@ function SignupModal({ onClose }: { onClose: () => void }) {
         }
 
         if (response.status >= 500) {
-          const fallback = "Estamos com instabilidade no envio da pré-inscrição. Tente novamente em instantes.";
-          setSubmitError(apiMessage ? `${fallback} (${apiMessage})` : fallback);
+          setSubmitError("Estamos com instabilidade no envio da pré-inscrição. Tente novamente em instantes.");
         } else {
           setSubmitError(apiMessage || "Não foi possível concluir a pré-inscrição. Tente novamente.");
         }

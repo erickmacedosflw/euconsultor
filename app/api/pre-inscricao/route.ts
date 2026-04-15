@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   const preInscricaoUrl = process.env.POWER_AUTOMATE_WEBHOOK_URL;
 
   if (!preInscricaoUrl) {
-    return NextResponse.json({ error: "Integração de pré-inscrição não configurada." }, { status: 500 });
+    return NextResponse.json({ error: "Serviço de pré-inscrição indisponível." }, { status: 503 });
   }
 
   let body: unknown;
@@ -63,6 +63,9 @@ export async function POST(request: Request) {
       });
 
       if (!response.ok) {
+        console.error("Webhook de pré-inscrição retornou erro:", {
+          status: response.status,
+        });
         return NextResponse.json({ error: "Falha ao enviar pré-inscrição." }, { status: 502 });
       }
     } finally {
@@ -70,8 +73,12 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.error("Falha no webhook de pré-inscrição:", error);
-    const status = error instanceof Error && error.name === "AbortError" ? 504 : 502;
-    return NextResponse.json({ error: "Falha ao enviar pré-inscrição." }, { status });
+    const isTimeout = error instanceof Error && error.name === "AbortError";
+    const status = isTimeout ? 504 : 502;
+    return NextResponse.json(
+      { error: isTimeout ? "Tempo limite excedido ao enviar pré-inscrição." : "Falha ao enviar pré-inscrição." },
+      { status },
+    );
   }
 
   return NextResponse.json({ ok: true });
