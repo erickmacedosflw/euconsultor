@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+const WEBHOOK_TIMEOUT_MS = 10000;
+
 type PreInscricaoPayload = {
   empresa: string;
   nomecompleto: string;
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const timeoutId = setTimeout(() => controller.abort(), WEBHOOK_TIMEOUT_MS);
     try {
       const response = await fetch(preInscricaoUrl, {
         method: "POST",
@@ -66,7 +68,8 @@ export async function POST(request: Request) {
     } finally {
       clearTimeout(timeoutId);
     }
-  } catch {
+  } catch (error) {
+    console.error("Falha no webhook de pré-inscrição:", error);
     return NextResponse.json({ error: "Falha ao enviar pré-inscrição." }, { status: 504 });
   }
 
