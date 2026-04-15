@@ -39,7 +39,7 @@ npm run build
 ## Observações
 
 - O modal de pré-inscrição da landing envia os dados para um endpoint server-side em `app/api/pre-inscricao/route.ts`.
-- Configure `POWER_AUTOMATE_WEBHOOK_URL` no `.env.local` com a URL do fluxo do Power Automate (use `&` nos parametros, nao `&amp;`).
+- Configure `POWER_AUTOMATE_WEBHOOK_URL` no `.env.local` com a URL do fluxo do Power Automate (use `&` nos parâmetros, não `&amp;`).
 - Os CTAs estao prontos, mas ainda apontam para rotas internas provisórias.
 - Se voce tiver a URL final de cadastro, demonstracao, WhatsApp ou checkout, basta substituir os destinos dos links.
 - A landing foi criada seguindo a identidade visual do produto vista nas telas enviadas: base clara, roxo institucional, cards limpos e aparencia de software profissional.
