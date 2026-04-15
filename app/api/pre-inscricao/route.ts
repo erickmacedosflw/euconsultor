@@ -49,18 +49,25 @@ export async function POST(request: Request) {
   }
 
   try {
-    const response = await fetch(preInscricaoUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      cache: "no-store",
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    try {
+      const response = await fetch(preInscricaoUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        cache: "no-store",
+        signal: controller.signal,
+      });
 
-    if (!response.ok) {
-      return NextResponse.json({ error: "Falha ao enviar pré-inscrição." }, { status: 502 });
+      if (!response.ok) {
+        return NextResponse.json({ error: "Falha ao enviar pré-inscrição." }, { status: 502 });
+      }
+    } finally {
+      clearTimeout(timeoutId);
     }
   } catch {
-    return NextResponse.json({ error: "Falha ao enviar pré-inscrição." }, { status: 502 });
+    return NextResponse.json({ error: "Falha ao enviar pré-inscrição." }, { status: 504 });
   }
 
   return NextResponse.json({ ok: true });
