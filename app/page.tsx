@@ -331,13 +331,17 @@ function SignupModal({ onClose }: { onClose: () => void }) {
       });
 
       if (!response.ok) {
-        setSubmitError("Não foi possível enviar sua pré-inscrição agora. Tente novamente em instantes.");
+        const message = response.status >= 500
+          ? "Estamos com instabilidade no envio da pré-inscrição. Tente novamente em instantes."
+          : "Confira os dados informados e tente novamente.";
+        setSubmitError(message);
         return;
       }
 
       setStep("success");
-    } catch {
-      setSubmitError("Não foi possível enviar sua pré-inscrição agora. Tente novamente em instantes.");
+    } catch (error) {
+      console.error("Erro ao enviar pré-inscrição:", error);
+      setSubmitError("Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.");
     } finally {
       setLoading(false);
     }
