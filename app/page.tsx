@@ -331,10 +331,18 @@ function SignupModal({ onClose }: { onClose: () => void }) {
       });
 
       if (!response.ok) {
+        let apiMessage = "";
+        try {
+          const data = await response.json() as { error?: string };
+          if (typeof data.error === "string") apiMessage = data.error;
+        } catch {
+          apiMessage = "";
+        }
+
         const message = response.status >= 500
           ? "Estamos com instabilidade no envio da pré-inscrição. Tente novamente em instantes."
-          : "Confira os dados informados e tente novamente.";
-        setSubmitError(message);
+          : apiMessage || "Não foi possível concluir a pré-inscrição. Tente novamente.";
+        setSubmitError(apiMessage && response.status >= 500 ? `${message} (${apiMessage})` : message);
         return;
       }
 
