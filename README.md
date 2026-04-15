@@ -37,6 +37,7 @@ npm run build
 
 ## Observacoes
 
+- O modal de pré-inscrição da landing envia os dados para um endpoint server-side em `app/api/pre-inscricao/route.ts`.
 - Os CTAs estao prontos, mas ainda apontam para rotas internas provisórias.
 - Se voce tiver a URL final de cadastro, demonstracao, WhatsApp ou checkout, basta substituir os destinos dos links.
 - A landing foi criada seguindo a identidade visual do produto vista nas telas enviadas: base clara, roxo institucional, cards limpos e aparencia de software profissional.
