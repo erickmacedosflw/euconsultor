@@ -217,6 +217,57 @@ const faq = [
 
 const audiences = ["Consultores Agro", "Veterinarios", "Zootecnistas", "Agronomos", "Consultores Tecnicos"];
 
+/* ── Countdown Timer ────────────────────────────────────── */
+
+function CountdownTimer() {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const targetDate = new Date("2026-04-27T00:00:00-03:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((difference % (1000 * 60)) / 1000),
+        });
+      } else {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
+    }
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="countdown-grid">
+      <div className="countdown-unit">
+        <div className="countdown-value">{String(timeLeft.days).padStart(2, "0")}</div>
+        <div className="countdown-label">Dias</div>
+      </div>
+      <div className="countdown-unit">
+        <div className="countdown-value">{String(timeLeft.hours).padStart(2, "0")}</div>
+        <div className="countdown-label">Horas</div>
+      </div>
+      <div className="countdown-unit">
+        <div className="countdown-value">{String(timeLeft.minutes).padStart(2, "0")}</div>
+        <div className="countdown-label">Minutos</div>
+      </div>
+      <div className="countdown-unit">
+        <div className="countdown-value">{String(timeLeft.seconds).padStart(2, "0")}</div>
+        <div className="countdown-label">Segundos</div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Signup Modal ───────────────────────────────────────── */
 
 type ModalStep = "closed" | "form" | "success";
@@ -226,6 +277,7 @@ function SignupModal({ onClose }: { onClose: () => void }) {
   const [empresa, setEmpresa] = useState("");
   const [consultor, setConsultor] = useState("");
   const [email, setEmail] = useState("");
+  const [areaAtuacao, setAreaAtuacao] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -254,6 +306,7 @@ function SignupModal({ onClose }: { onClose: () => void }) {
     if (!consultor.trim()) e.consultor = "Informe seu nome completo.";
     if (!email.trim()) e.email = "Informe seu e-mail.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = "E-mail inválido.";
+    if (!areaAtuacao.trim()) e.areaAtuacao = "Informe sua área de atuação.";
     return e;
   }
 
@@ -282,8 +335,8 @@ function SignupModal({ onClose }: { onClose: () => void }) {
 
         {step === "form" ? (
           <>
-            <h2 className="modal-title">Comece agora gratuitamente</h2>
-            <p className="modal-sub">Preencha os dados abaixo e receba seu acesso por e-mail.</p>
+            <h2 className="modal-title">Faça sua pré-inscrição</h2>
+            <p className="modal-sub">Preencha os dados abaixo e seja um dos primeiros a usar o app com desconto exclusivo.</p>
             <form className="modal-form" onSubmit={handleSubmit} noValidate>
               <div className="modal-field">
                 <label htmlFor="empresa">Nome da empresa</label>
@@ -321,8 +374,20 @@ function SignupModal({ onClose }: { onClose: () => void }) {
                 />
                 {errors.email && <span className="field-error">{errors.email}</span>}
               </div>
+              <div className="modal-field">
+                <label htmlFor="areaAtuacao">Área de atuação</label>
+                <input
+                  id="areaAtuacao"
+                  type="text"
+                  placeholder="Ex: Zootecnista, Veterinário, Agrônomo"
+                  value={areaAtuacao}
+                  onChange={e => setAreaAtuacao(e.target.value)}
+                  className={errors.areaAtuacao ? "input-error" : ""}
+                />
+                {errors.areaAtuacao && <span className="field-error">{errors.areaAtuacao}</span>}
+              </div>
               <button type="submit" className="modal-submit" disabled={loading}>
-                {loading ? <span className="modal-spinner" /> : "Criar minha conta →"}
+                {loading ? <span className="modal-spinner" /> : "Fazer pré-inscrição →"}
               </button>
             </form>
           </>
@@ -369,7 +434,7 @@ export default function Home() {
           <a href="#na-pratica">Na prática</a>
           <a href="#plano">Plano</a>
         </div>
-        <button className="nav__cta" onClick={openModal}>Começar agora</button>
+        <button className="nav__cta" onClick={openModal}>Fazer pré-inscrição</button>
       </nav>
 
       {/* HERO */}
@@ -387,7 +452,7 @@ export default function Home() {
               e controle o que deve ser cobrado — tudo em um so lugar.
             </p>
             <div className="hero-actions reveal revealed" style={{ transitionDelay: "240ms" }}>
-              <button className="btn btn-primary" onClick={openModal}>Começar agora →</button>
+              <button className="btn btn-primary" onClick={openModal}>Fazer pré-inscrição →</button>
             </div>
             <div className="hero-trust reveal revealed" style={{ transitionDelay: "320ms" }}>
               {audiences.map(a => <span key={a} className="trust-pill">{a}</span>)}
@@ -429,6 +494,34 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* COUNTDOWN / LAUNCH */}
+      <section className="section-wrap section-countdown">
+        <Reveal>
+          <div className="countdown-header">
+            <div className="section-label">Lançamento em breve</div>
+            <h2 className="section-h2">Faltam poucos dias para você revolucionar sua gestão.</h2>
+            <p className="section-sub">
+              O Eu, Consultor será lançado oficialmente em <strong>27 de abril de 2026</strong>.
+              Faça sua pré-inscrição agora e garanta 3 meses com <strong>20% de desconto</strong> nas primeiras mensalidades.
+            </p>
+          </div>
+        </Reveal>
+        <Reveal delay={100}>
+          <CountdownTimer />
+        </Reveal>
+        <Reveal delay={200}>
+          <div className="countdown-cta">
+            <div className="countdown-offer-badge">🎁 Oferta de lançamento</div>
+            <p className="countdown-offer-text">
+              Seja um dos primeiros a usar o app e ganhe <strong>20% de desconto</strong> nos 3 primeiros meses!
+            </p>
+            <button className="btn btn-primary btn-lg" onClick={openModal}>
+              Fazer pré-inscrição e garantir desconto →
+            </button>
+          </div>
+        </Reveal>
       </section>
 
             {/* PROBLEMA */}
@@ -587,7 +680,7 @@ export default function Home() {
                 <p>Tudo que você precisa para gerenciar clientes, visitas, km e cobranças — na palma da mão ou no computador, sem precisar instalar nada.</p>
               </div>
               <div className="pricing-actions">
-                <button className="btn btn-primary btn-lg" onClick={openModal}>Começar com o Plano Profissional →</button>
+                <button className="btn btn-primary btn-lg" onClick={openModal}>Fazer pré-inscrição →</button>
               </div>
             </div>
             <div className="pricing-features">
@@ -620,7 +713,7 @@ export default function Home() {
             <h2>Comece hoje mesmo.</h2>
             <p>Controle completo dos seus atendimentos, clientes e cobrancas em um unico sistema.</p>
             <div className="cta-actions">
-              <button className="btn btn-primary btn-lg" onClick={openModal}>Começar agora →</button>
+              <button className="btn btn-primary btn-lg" onClick={openModal}>Fazer pré-inscrição →</button>
             </div>
           </div>
         </Reveal>
