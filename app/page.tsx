@@ -279,6 +279,7 @@ function SignupModal({ onClose }: { onClose: () => void }) {
   const [email, setEmail] = useState("");
   const [areaAtuacao, setAreaAtuacao] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState("");
   const [loading, setLoading] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -310,14 +311,36 @@ function SignupModal({ onClose }: { onClose: () => void }) {
     return e;
   }
 
-  function handleSubmit(ev: React.FormEvent) {
+  async function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault();
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
     setErrors({});
+    setSubmitError("");
     setLoading(true);
-    // Simulate async (replace with real API call later)
-    setTimeout(() => { setLoading(false); setStep("success"); }, 1200);
+    try {
+      const response = await fetch("/api/pre-inscricao", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          empresa: empresa.trim(),
+          nomecompleto: consultor.trim(),
+          email: email.trim(),
+          area: areaAtuacao.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        setSubmitError("Não foi possível enviar sua pré-inscrição agora. Tente novamente em instantes.");
+        return;
+      }
+
+      setStep("success");
+    } catch {
+      setSubmitError("Não foi possível enviar sua pré-inscrição agora. Tente novamente em instantes.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   const content = (
@@ -386,6 +409,7 @@ function SignupModal({ onClose }: { onClose: () => void }) {
                 />
                 {errors.areaAtuacao && <span className="field-error">{errors.areaAtuacao}</span>}
               </div>
+              {submitError && <p className="field-error" role="alert" aria-live="assertive">{submitError}</p>}
               <button type="submit" className="modal-submit" disabled={loading}>
                 {loading ? <span className="modal-spinner" /> : "Fazer pré-inscrição →"}
               </button>
