@@ -9,6 +9,10 @@ type PreInscricaoPayload = {
   area: string;
 };
 
+function normalizeWebhookUrl(url: string): string {
+  return url.trim().replace(/^['"]|['"]$/g, "").replaceAll("&amp;", "&");
+}
+
 function isValidPayload(body: unknown): body is PreInscricaoPayload {
   if (!body || typeof body !== "object") return false;
   const payload = body as Record<string, unknown>;
@@ -21,11 +25,13 @@ function isValidPayload(body: unknown): body is PreInscricaoPayload {
 }
 
 export async function POST(request: Request) {
-  const preInscricaoUrl = process.env.POWER_AUTOMATE_WEBHOOK_URL;
+  const rawWebhookUrl = process.env.POWER_AUTOMATE_WEBHOOK_URL;
 
-  if (!preInscricaoUrl) {
+  if (!rawWebhookUrl) {
     return NextResponse.json({ error: "Serviço de pré-inscrição indisponível." }, { status: 503 });
   }
+
+  const preInscricaoUrl = normalizeWebhookUrl(rawWebhookUrl);
 
   let body: unknown;
 
