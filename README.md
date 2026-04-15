@@ -23,6 +23,7 @@ Landing page SaaS em Next.js para o produto Eu, Consultor, focada em conversao p
 ## Desenvolvimento
 
 ```bash
+cp .env.example .env.local
 npm run dev
 ```
 
@@ -38,6 +39,7 @@ npm run build
 ## Observacoes
 
 - O modal de pré-inscrição da landing envia os dados para um endpoint server-side em `app/api/pre-inscricao/route.ts`.
+- Configure `POWER_AUTOMATE_WEBHOOK_URL` no `.env.local` com a URL do fluxo do Power Automate.
 - Os CTAs estao prontos, mas ainda apontam para rotas internas provisórias.
 - Se voce tiver a URL final de cadastro, demonstracao, WhatsApp ou checkout, basta substituir os destinos dos links.
 - A landing foi criada seguindo a identidade visual do produto vista nas telas enviadas: base clara, roxo institucional, cards limpos e aparencia de software profissional.

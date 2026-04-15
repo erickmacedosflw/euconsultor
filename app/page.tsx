@@ -358,7 +358,7 @@ function SignupModal({ onClose }: { onClose: () => void }) {
                 />
                 {errors.area && <span className="field-error">{errors.area}</span>}
               </div>
-              {submitError && <p className="field-error">{submitError}</p>}
+              {submitError && <p className="field-error" role="alert" aria-live="assertive">{submitError}</p>}
               <button type="submit" className="modal-submit" disabled={loading}>
                 {loading ? <span className="modal-spinner" /> : "Enviar pré-inscrição →"}
               </button>
