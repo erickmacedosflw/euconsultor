@@ -223,7 +223,7 @@ function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const targetDate = new Date("2026-04-27T00:00:00-03:00").getTime();
+    const targetDate = new Date("2026-05-01T00:00:00-03:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -540,7 +540,7 @@ export default function Home() {
             <div className="section-label">Lançamento em breve</div>
             <h2 className="section-h2">Faltam poucos dias para você revolucionar sua gestão.</h2>
             <p className="section-sub">
-              O Eu, Consultor será lançado oficialmente em <strong>27 de abril de 2026</strong>.
+              O Eu, Consultor será lançado oficialmente em <strong>1º de maio de 2026</strong>.
               Faça sua pré-inscrição agora e garanta 3 meses com <strong>20% de desconto</strong> nas primeiras mensalidades.
             </p>
           </div>
